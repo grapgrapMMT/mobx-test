@@ -2,38 +2,44 @@ import { observer } from "mobx-react";
 import React, { FC, useEffect } from "react";
 import { store, User } from "./store";
 
-const Age: FC<{ user?: User; onClick: () => void }> = observer(
-  ({ user, onClick }) => {
+const Age: FC<{ age?: User["age"]; onClick: () => void }> = observer(
+  ({ age, onClick }) => {
     console.count("age");
     const handleOnClick = () => {
       onClick();
     };
-    return <p onClick={handleOnClick}>{user?.age ?? 1}</p>;
+    return <p onClick={handleOnClick}>{age?.value || 0}</p>;
   }
 );
-const Name: FC<{ user?: User }> = observer(({ user }) => {
+const Name: FC<{ name?: User["name"] }> = observer(({ name }) => {
   console.count("name");
-  return <p>{user?.name ?? ""}</p>;
+  return <p>{name?.value || ""}</p>;
 });
 const ViewUser: FC<{ user?: User; onClick: () => void }> = observer(
   ({ user, onClick }) => {
     console.count("user");
+    const { name, age } = user || {};
     return (
       <div>
-        <Name user={user} />
-        <Age user={user} onClick={onClick} />
+        <Name name={name} />
+        <Age age={age} onClick={onClick} />
       </div>
     );
   }
 );
 
 const App: React.FC = observer(() => {
-  const { increase, init, user } = store;
+  const { increase, init, reset, user } = store;
   console.count("app");
   useEffect(() => {
     init();
   }, [init]);
-  return <ViewUser user={user} onClick={increase} />;
+  return (
+    <div>
+      <ViewUser user={user} onClick={increase} />
+      <button onClick={() => reset()}>init</button>
+    </div>
+  );
 });
 
 export default App;
