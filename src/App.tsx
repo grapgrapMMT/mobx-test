@@ -2,26 +2,26 @@ import { observer } from "mobx-react";
 import React, { FC, useEffect } from "react";
 import { store, User } from "./store";
 
-const Age: FC<{ age: number; onClick: () => void }> = observer(
-  ({ age, onClick }) => {
+const Age: FC<{ user?: User; onClick: () => void }> = observer(
+  ({ user, onClick }) => {
     console.count("age");
     const handleOnClick = () => {
       onClick();
     };
-    return <p onClick={handleOnClick}>{age}</p>;
+    return <p onClick={handleOnClick}>{user?.age ?? 1}</p>;
   }
 );
-const Name: FC<{ name: string }> = observer(({ name }) => {
+const Name: FC<{ user?: User }> = observer(({ user }) => {
   console.count("name");
-  return <p>{name}</p>;
+  return <p>{user?.name ?? ""}</p>;
 });
 const ViewUser: FC<{ user?: User; onClick: () => void }> = observer(
   ({ user, onClick }) => {
     console.count("user");
     return (
       <div>
-        <Name name={user?.name || ""} />
-        <Age age={user?.age || 0} onClick={onClick} />
+        <Name user={user} />
+        <Age user={user} onClick={onClick} />
       </div>
     );
   }
