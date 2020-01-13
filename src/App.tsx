@@ -17,12 +17,11 @@ const Name: FC<{ name: string }> = observer(({ name }) => {
 });
 const ViewUser: FC<{ user?: User; onClick: () => void }> = observer(
   ({ user, onClick }) => {
-    const { name, age } = user || {};
     console.count("user");
     return (
       <div>
-        <Name name={name || ""} />
-        <Age age={age || 0} onClick={onClick} />
+        <Name name={user?.name || ""} />
+        <Age age={user?.age || 0} onClick={onClick} />
       </div>
     );
   }
